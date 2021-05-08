@@ -10,34 +10,40 @@ var publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgIdCVYnz6JOFT7GGtjr
 var signature = "KDGgtd7VDeyvNdyafyXNVZM8l/0zohWze5UCt1N0mbzCZ1f23nYEgnLrFvTRYADnToat/axKOGeXjiOBWJh/FcPvcWParx8x5d35j2u76/UmRPKjo8jxtMspmN27WlPdtTRr9kqHdDHUg80/9z1qKuEcUfm4EQX52NOvozDMb4qyYorgxaFCwUwMdZNskArIBTeJBtULAOtJqnEGipKRtRjeU6j2xD2uNzc3Vcy3+tdImRfqbX6SkS44zgkcFua6xEc09qRnRvLd+bxjSIufQ/wU695Uej9AtFg7MlrRCUaEZ2SVkNcmOUdRP2q882Y9mWGDIXdk66QHCVfCVu7pog=="
 
 var validateTestCases = []struct {
-	body      []byte
-	key string
-	sig string
-	valid     bool
+	body  []byte
+	key   string
+	sig   string
+	valid bool
 }{
 	{
-		body:      []byte(`{"one":"Value","two":"Other"}`),
-		key:    publicKey,
-		sig: signature,
-		valid:     true,
+		body:  []byte(`{"one":"Value","two":"Other"}`),
+		key:   publicKey,
+		sig:   signature,
+		valid: true,
 	},
 	{
-		body:      []byte(`{"one":"Value","two":"Other"}`),
-		key:    publicKey,
-		sig: "[invalid]signature",
-		valid:     false,
+		body:  nil,
+		key:   publicKey,
+		sig:   signature,
+		valid: false,
 	},
 	{
-		body:      []byte("[invalid]this is the request body"),
-		key:    publicKey,
-		sig: signature,
-		valid:     false,
+		body:  []byte(`{"one":"Value","two":"Other"}`),
+		key:   publicKey,
+		sig:   "[invalid]signature",
+		valid: false,
 	},
 	{
-		body:      []byte(`{"one":"Value","two":"Other"}`),
-		key:    "[invalid]publicKey",
-		sig: signature,
-		valid:     false,
+		body:  []byte("[invalid]this is the request body"),
+		key:   publicKey,
+		sig:   signature,
+		valid: false,
+	},
+	{
+		body:  []byte(`{"one":"Value","two":"Other"}`),
+		key:   "[invalid]publicKey",
+		sig:   signature,
+		valid: false,
 	},
 }
 
