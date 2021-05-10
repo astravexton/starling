@@ -120,7 +120,7 @@ func (c *Client) CreateSavingsGoal(ctx context.Context, accountUID string, uid s
 		ers[i] = v.Message
 	}
 
-	if sgResp.Success {
+	if !sgResp.Success {
 		return resp, fmt.Errorf(strings.Join(ers, ", "))
 	}
 
