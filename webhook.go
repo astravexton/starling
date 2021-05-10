@@ -15,37 +15,26 @@ import (
 
 // WebHookPayload defines the structure of the Starling web hook payload
 type WebHookPayload struct {
-	WebhookEventUID  string         `json:"webhookEventUid"`
-	EventTimestamp   time.Time      `json:"eventTimestamp"`
-	Content          WebHookContent `json:"content"`
-	AccountHolderUID string         `json:"accountHolderUid"`
+	WebhookEventUID  string          `json:"webhookEventUid"`
+	EventTimestamp   time.Time       `json:"eventTimestamp"`
+	Content          WebHookFeedItem `json:"content"`
+	AccountHolderUID string          `json:"accountHolderUid"`
 }
 
-// WebHookContent defines the structure of the Starling web hook content
-type WebHookContent struct {
-	Class          string  `json:"class"`
-	TransactionUID string  `json:"transactionUid"`
-	Amount         float64 `json:"amount"`
-	SourceCurrency string  `json:"sourceCurrency"`
-	SourceAmount   float64 `json:"sourceAmount"`
-	CounterParty   string  `json:"counterParty"`
-	Reference      string  `json:"reference"`
-	Type           string  `json:"type"`
-	ForCustomer    string  `json:"forCustomer"`
-}
-
-type MasterCardFeedItem struct {
-	MerchantIdentifier string    `json:"merchantIdentifier"`
-	MCC                int32     `json:"mcc"`
-	PosTimestamp       time.Time `json:"posTimestamp"`
-	CardLast4          string    `json:"cardLast4"`
-}
-
+// WebHookFeedItem defines the structure of the Starling web hook feed item
 type WebHookFeedItem struct {
 	FeedItem
 	AccountUID            string             `json:"accountUid"`
 	FeedItemFailureReason string             `json:"feedItemFailureReason"`
 	MasterCardFeedDetails MasterCardFeedItem `json:"masterCardFeedDetails"`
+}
+
+// MasterCardFeedItem defines the structure of the MasterCard feed item
+type MasterCardFeedItem struct {
+	MerchantIdentifier string    `json:"merchantIdentifier"`
+	MCC                int32     `json:"mcc"`
+	PosTimestamp       time.Time `json:"posTimestamp"`
+	CardLast4          string    `json:"cardLast4"`
 }
 
 // Validate takes an http request and a base64-encoded web-hook public key
