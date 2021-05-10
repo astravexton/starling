@@ -43,6 +43,25 @@ func Example_account() {
 	}
 }
 
+func Example_card() {
+	godotenv.Load(".env")
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("STARLING_DEV_TOKEN")})
+	ctx := context.Background()
+	tc := oauth2.NewClient(ctx, ts)
+
+	baseURL, _ := url.Parse(starling.ProdURL)
+	opts := starling.ClientOptions{BaseURL: baseURL}
+	client := starling.NewClientWithOptions(tc, opts)
+	cards, _, err := client.Cards(ctx)
+	if err != nil {
+		log.Fatalf("Whoops: %v", err)
+	}
+
+	for _, card := range cards {
+		fmt.Println(card.PublicToken, card.Enabled)
+	}
+}
+
 func Example_balance() {
 	godotenv.Load(".env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("STARLING_DEV_TOKEN")})

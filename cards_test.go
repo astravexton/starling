@@ -14,37 +14,89 @@ var cardTestCases = []struct {
 	mock string
 }{
 	{
-		name: "sample card",
+		name: "sample cards",
 		mock: `{
-			"_links": {
-				"transactions": {
-					"href": "/api/v1/transactions/mastercard?from={fromDate}&to={toDate}",
-					"templated": true
+			"cards": [
+				{
+					"cardUid": "ddeeddee-ddee-ddee-ddee-ddeeddeeddee",
+					"publicToken": "123456789",
+					"enabled": true,
+					"walletNotificationEnabled": true,
+					"posEnabled": true,
+					"atmEnabled": true,
+					"onlineEnabled": true,
+					"mobileWalletEnabled": true,
+					"gamblingEnabled": true,
+					"magStripeEnabled": true,
+					"cancelled": true,
+					"activationRequested": true,
+					"activated": true,
+					"endOfCardNumber": "59312",
+					"currencyFlags": [
+						{
+							"enabled": true,
+							"currency": "string"
+						}
+					],
+					"cardAssociationUid": "aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa",
+					"gamblingToBeEnabledAt": "2021-05-10T13:34:22.322Z"
 				}
-			},
-			"id": "8e9c955c-b209-4887-af32-a9e4999e985e",
-			"nameOnCard": "Vincent Adultman",
-			"type": "ContactlessDebitMastercard",
-			"enabled": true,
-			"cancelled": false,
-			"activationRequested": true,
-			"activated": true,
-			"dispatchDate": "2018-03-13",
-			"lastFourDigits": "0142"
+			]
 		}`,
 	},
 	{
-		name: "sample card without HAL wrapper",
+		name: "multiple sample cards",
 		mock: `{
-			"id": "8e9c955c-b209-4887-af32-a9e4999e985e",
-			"nameOnCard": "Vincent Adultman",
-			"type": "ContactlessDebitMastercard",
-			"enabled": true,
-			"cancelled": false,
-			"activationRequested": true,
-			"activated": true,
-			"dispatchDate": "2018-03-13",
-			"lastFourDigits": "0142"
+			"cards": [
+				{
+					"cardUid": "ddeeddee-ddee-ddee-ddee-ddeeddeeddee",
+					"publicToken": "123456789",
+					"enabled": true,
+					"walletNotificationEnabled": true,
+					"posEnabled": true,
+					"atmEnabled": true,
+					"onlineEnabled": true,
+					"mobileWalletEnabled": true,
+					"gamblingEnabled": true,
+					"magStripeEnabled": true,
+					"cancelled": true,
+					"activationRequested": true,
+					"activated": true,
+					"endOfCardNumber": "59312",
+					"currencyFlags": [
+						{
+							"enabled": true,
+							"currency": "string"
+						}
+					],
+					"cardAssociationUid": "aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa",
+					"gamblingToBeEnabledAt": "2021-05-10T13:34:22.322Z"
+				},
+				{
+					"cardUid": "ddeeddee-ddee-ddee-ddee-ddeeddeeddee",
+					"publicToken": "987654321",
+					"enabled": true,
+					"walletNotificationEnabled": true,
+					"posEnabled": true,
+					"atmEnabled": true,
+					"onlineEnabled": true,
+					"mobileWalletEnabled": true,
+					"gamblingEnabled": true,
+					"magStripeEnabled": true,
+					"cancelled": true,
+					"activationRequested": true,
+					"activated": true,
+					"endOfCardNumber": "59312",
+					"currencyFlags": [
+						{
+							"enabled": true,
+							"currency": "string"
+						}
+					],
+					"cardAssociationUid": "aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa",
+					"gamblingToBeEnabledAt": "2021-05-10T13:34:22.322Z"
+				}
+			]
 		}`,
 	},
 }
@@ -61,19 +113,19 @@ func testCard(t *testing.T, name, mock string) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/v1/cards", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/v2/cards", func(w http.ResponseWriter, r *http.Request) {
 		checkMethod(t, r, http.MethodGet)
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.Card(context.Background())
+	got, _, err := client.Cards(context.Background())
 	checkNoError(t, err)
 
-	want := &Card{}
+	want := &cards{}
 	json.Unmarshal([]byte(mock), want)
 
-	if !reflect.DeepEqual(got, want) {
-		t.Error("should return a card matching the mock response", cross)
+	if !reflect.DeepEqual(got, want.Cards) {
+		t.Error("should return cards matching the mock response", cross)
 	}
 }
 
@@ -81,12 +133,12 @@ func TestCardForbidden(t *testing.T) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
-	mux.HandleFunc("/api/v1/cards", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/v2/cards", func(w http.ResponseWriter, r *http.Request) {
 		checkMethod(t, r, http.MethodGet)
 		w.WriteHeader(http.StatusForbidden)
 	})
 
-	got, resp, err := client.Card(context.Background())
+	got, resp, err := client.Cards(context.Background())
 	checkHasError(t, err)
 
 	if resp.StatusCode != http.StatusForbidden {

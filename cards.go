@@ -3,33 +3,52 @@ package starling
 import (
 	"context"
 	"net/http"
+	"time"
 )
+
+// Cards represents a collection of cards.
+type cards struct {
+	Cards []Card `json:"cards"`
+}
 
 // Card represents card details
 type Card struct {
-	UID                 string `json:"id"`
-	NameOnCard          string `json:"nameOnCard"`
-	Type                string `json:"type"`
-	Enabled             bool   `json:"enabled"`
-	Cancelled           bool   `json:"cancelled"`
-	ActivationRequested bool   `json:"activationRequested"`
-	Activated           bool   `json:"activated"`
-	DispatchDate        string `json:"dispatchDate"`
-	LastFourDigits      string `json:"lastFourDigits"`
+	CardUID                   string         `json:"cardUid"`
+	PublicToken               string         `json:"publicToken"`
+	Enabled                   bool           `json:"enabled"`
+	Cancelled                 bool           `json:"cancelled"`
+	ActivationRequested       bool           `json:"activationRequested"`
+	Activated                 bool           `json:"activated"`
+	WalletNotificationsEnaled bool           `json:"walletNotificationsEnabled"`
+	PosEnabled                bool           `json:"posEnabled"`
+	AtmEnabled                bool           `json:"atmEnabled"`
+	OnlineEnabled             bool           `json:"onlineEnabled"`
+	MobileWalletEnabled       bool           `json:"mobileWalletEnabled"`
+	GamblingEnabled           bool           `json:"gamblingEnabled"`
+	MagStripeEnabled          bool           `json:"magStripeEnabled"`
+	EndOfCardNumber           string         `json:"endOfCardNumber"`
+	CurrencyFlags             []CurrencyFlag `json:"currencyFlags"`
+	CardAssociationUID        string         `json:"cardAssociationUid"`
+	GamblingToBeEnabledAt     time.Time      `json:"gamblingToBeEnabledAt"`
 }
 
-// Card returns the the customer details for the current customer.
-func (c *Client) Card(ctx context.Context) (*Card, *http.Response, error) {
-	req, err := c.NewRequest("GET", "/api/v1/cards", nil)
+type CurrencyFlag struct {
+	Enabled  bool   `json:"enabled"`
+	Currency string `json:"currency"`
+}
+
+// Cards returns a list of cards.
+func (c *Client) Cards(ctx context.Context) ([]Card, *http.Response, error) {
+	req, err := c.NewRequest("GET", "/api/v2/cards", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var card *Card
-	resp, err := c.Do(ctx, req, &card)
+	var cards cards
+	resp, err := c.Do(ctx, req, &cards)
 	if err != nil {
-		return card, resp, err
+		return cards.Cards, resp, err
 	}
 
-	return card, resp, nil
+	return cards.Cards, resp, nil
 }
