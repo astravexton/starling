@@ -49,3 +49,9 @@ type DateRange struct {
 	From time.Time
 	To   time.Time
 }
+
+//
+type statusResponse struct {
+	Success bool          `json:"success"`
+	Errors  []ErrorDetail `json:"errors"`
+}

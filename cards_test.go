@@ -149,3 +149,67 @@ func TestCardForbidden(t *testing.T) {
 		t.Error("should not return a card")
 	}
 }
+
+func TestEnableCard(t *testing.T) {
+	client, mux, _, teardown := setup()
+	defer teardown()
+
+	cardID := "ddeeddee-ddee-ddee-ddee-ddeeddeeddee"
+	mockReq := enabledRequest{Enabled: true}
+	mockResp := &statusResponse{}
+	mux.HandleFunc("/api/v2/cards/ddeeddee-ddee-ddee-ddee-ddeeddeeddee/controls/enabled", func(w http.ResponseWriter, r *http.Request) {
+		checkMethod(t, r, http.MethodPut)
+		fmt.Fprintln(w, mockResp)
+
+		var ecReq = enabledRequest{}
+		err := json.NewDecoder(r.Body).Decode(&ecReq)
+		if err != nil {
+			t.Fatal("should send a request that the API can parse", cross, err)
+		}
+
+		if !reflect.DeepEqual(mockReq, ecReq) {
+			t.Error("should send a request that matches the mock", cross)
+		}
+	})
+
+	resp, err := client.EnableCard(context.Background(), cardID, true)
+	if err != nil {
+		t.Fatal("should be able to make the request", cross, err)
+	}
+
+	if got, want := resp.StatusCode, http.StatusOK; got != want {
+		t.Errorf("should receive a %d status code %s %d", want, cross, got)
+	}
+}
+
+func TestEnableCardOption(t *testing.T) {
+	client, mux, _, teardown := setup()
+	defer teardown()
+
+	cardID := "ddeeddee-ddee-ddee-ddee-ddeeddeeddee"
+	mockReq := enabledRequest{Enabled: true}
+	mockResp := &statusResponse{}
+	mux.HandleFunc("/api/v2/cards/ddeeddee-ddee-ddee-ddee-ddeeddeeddee/controls/atm-enabled", func(w http.ResponseWriter, r *http.Request) {
+		checkMethod(t, r, http.MethodPut)
+		fmt.Fprintln(w, mockResp)
+
+		var ecReq = enabledRequest{}
+		err := json.NewDecoder(r.Body).Decode(&ecReq)
+		if err != nil {
+			t.Fatal("should send a request that the API can parse", cross, err)
+		}
+
+		if !reflect.DeepEqual(mockReq, ecReq) {
+			t.Error("should send a request that matches the mock", cross)
+		}
+	})
+
+	resp, err := client.EnableCardOption(context.Background(), cardID, "atm", true)
+	if err != nil {
+		t.Fatal("should be able to make the request", cross, err)
+	}
+
+	if got, want := resp.StatusCode, http.StatusOK; got != want {
+		t.Errorf("should receive a %d status code %s %d", want, cross, got)
+	}
+}

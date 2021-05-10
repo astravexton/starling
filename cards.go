@@ -3,6 +3,7 @@ package starling
 import (
 	"context"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -37,6 +38,10 @@ type CurrencyFlag struct {
 	Currency string `json:"currency"`
 }
 
+type enabledRequest struct {
+	Enabled bool `json:"enabled"`
+}
+
 // Cards returns a list of cards.
 func (c *Client) Cards(ctx context.Context) ([]Card, *http.Response, error) {
 	req, err := c.NewRequest("GET", "/api/v2/cards", nil)
@@ -51,4 +56,35 @@ func (c *Client) Cards(ctx context.Context) ([]Card, *http.Response, error) {
 	}
 
 	return cards.Cards, resp, nil
+}
+
+// EnableCard enables a card.
+func (c *Client) EnableCard(ctx context.Context, cardUID string, en bool) (*http.Response, error) {
+	req, err := c.NewRequest("PUT", "/api/v2/cards/"+cardUID+"/controls/enabled", enabledRequest{Enabled: en})
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}
+
+// EnableCardOption enables a specific card option with the list of valid options being:
+// atm, gambling, mag-stripe, mobile-wallet, online, pos
+func (c *Client) EnableCardOption(ctx context.Context, cardUID, option string, en bool) (*http.Response, error) {
+	req, err := c.NewRequest("PUT", "/api/v2/cards/"+cardUID+"/controls/"+strings.ToLower(option)+"-enabled", enabledRequest{Enabled: en})
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.Do(ctx, req, nil)
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
 }
