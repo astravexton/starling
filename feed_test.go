@@ -18,18 +18,18 @@ var feedTC = []struct {
 	mock  string
 }{
 	{
-		name: "no transactions",
-		act:  "30aa7ab8-4389-4658-a4f8-0bc6d0015ba0",
-		cat:  "c423ab8d-9a6a-44b2-8db6-ac6000fe58e0",
+		name:  "no transactions",
+		act:   "30aa7ab8-4389-4658-a4f8-0bc6d0015ba0",
+		cat:   "c423ab8d-9a6a-44b2-8db6-ac6000fe58e0",
 		since: time.Now(),
 		mock: `{
 		"feedItems": []
 		}`,
 	},
 	{
-		name: "single transaction",
-		act:  "30aa7ab8-4389-4658-a4f8-0bc6d0015ba0",
-		cat:  "c423ab8d-9a6a-44b2-8db6-ac6000fe58e0",
+		name:  "single transaction",
+		act:   "30aa7ab8-4389-4658-a4f8-0bc6d0015ba0",
+		cat:   "c423ab8d-9a6a-44b2-8db6-ac6000fe58e0",
 		since: time.Now(),
 		mock: `{
 		"feedItems": [
@@ -59,9 +59,9 @@ var feedTC = []struct {
 		}`,
 	},
 	{
-		name: "multiple transactions",
-		act:  "30aa7ab8-4389-4658-a4f8-0bc6d0015ba0",
-		cat:  "c423ab8d-9a6a-44b2-8db6-ac6000fe58e0",
+		name:  "multiple transactions",
+		act:   "30aa7ab8-4389-4658-a4f8-0bc6d0015ba0",
+		cat:   "c423ab8d-9a6a-44b2-8db6-ac6000fe58e0",
 		since: time.Now(),
 		mock: `{
 			"feedItems": [
@@ -298,7 +298,7 @@ func testFeedItem(t *testing.T, name, act, cat, itm, mock string) {
 	got, _, err := client.FeedItem(context.Background(), act, cat, itm)
 	checkNoError(t, err)
 
-	want := new(Item)
+	want := new(FeedItem)
 	json.Unmarshal([]byte(mock), want)
 
 	if got == nil {

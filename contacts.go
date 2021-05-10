@@ -102,7 +102,7 @@ func (c *Client) ContactAccount(ctx context.Context, cUID, aUID string) (*Contac
 	}
 
 	var ca *ContactAccount
-	resp, err := c.Do(ctx, req, &ca)
+	resp, _ := c.Do(ctx, req, &ca)
 	return ca, resp, nil
 }
 
