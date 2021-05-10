@@ -19,7 +19,6 @@ type WebHookPayload struct {
 	EventTimestamp   time.Time      `json:"eventTimestamp"`
 	Content          WebHookContent `json:"content"`
 	AccountHolderUID string         `json:"accountHolderUid"`
-	WebhookType      string         `json:"webhookType"`
 }
 
 // WebHookContent defines the structure of the Starling web hook content
