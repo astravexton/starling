@@ -83,7 +83,7 @@ func main() {
 
 ## Contributors
 
-* [@astravexton](https://github.com/astravexton/starling/?commits?author=astravexton)
+* [@astravexton](https://github.com/astravexton/starling/commits?author=astravexton)
 * [@lildude](https://github.com/lildude/starling/commits?author=lildude)
 * [@tuckerwales](https://github.com/tuckerwales/starling/commits?author=tuckerwales)
 * [@billglover](https://github.com/billglover/starling/commits?author=billglover)
