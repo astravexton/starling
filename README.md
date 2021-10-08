@@ -1,6 +1,6 @@
 # Starling
 
-![Build Status](https://github.com/lildude/starling/actions/workflows/test.yml/badge.svg)
+![Build Status](https://github.com/astravexton/starling/actions/workflows/tests.yml/badge.svg)
 
 This is an unofficial Go client for the Starling Bank API and a fork of the original package at <https://github.com/billglover/starling>.
 
