@@ -8,8 +8,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/astravexton/starling"
 	"github.com/joho/godotenv"
-	"github.com/lildude/starling"
 	"golang.org/x/oauth2"
 )
 

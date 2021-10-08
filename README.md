@@ -13,7 +13,7 @@ Both the Starling Bank API itself and this package are under active development 
 Use Go to fetch the latest version of the package.
 
 ```shell
-go get -u 'github.com/lildude/starling'
+go get -u 'github.com/astravexton/starling'
 ```
 
 ## Usage
@@ -27,7 +27,7 @@ import (
     "context"
     "fmt"
 
-    "github.com/lildude/starling"
+    "github.com/astravexton/starling"
     "golang.org/x/oauth2"
 )
 
@@ -56,7 +56,7 @@ import (
     "fmt"
     "net/url"
 
-    "github.com/lildude/starling"
+    "github.com/astravexton/starling"
     "golang.org/x/oauth2"
 )
 
@@ -83,6 +83,7 @@ func main() {
 
 ## Contributors
 
+* [@astravexton](https://github.com/astravexton/starling/?commits?author=astravexton)
 * [@lildude](https://github.com/lildude/starling/commits?author=lildude)
 * [@tuckerwales](https://github.com/lildude/starling/commits?author=tuckerwales)
 * [@billglover](https://github.com/lildude/starling/commits?author=billglover)
