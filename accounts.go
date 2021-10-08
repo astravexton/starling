@@ -30,21 +30,6 @@ type accounts struct {
 	Accounts []AccountSummary `json:"accounts"`
 }
 
-// Account returns the the account details for the current customer.
-func (c *Client) Account(ctx context.Context) (*Account, *http.Response, error) {
-	req, err := c.NewRequest("GET", "/api/v2/accounts", nil)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	var act *Account
-	resp, err := c.Do(ctx, req, &act)
-	if err != nil {
-		return act, resp, err
-	}
-	return act, resp, nil
-}
-
 // Accounts returns the the accounts held by the current user.
 func (c *Client) Accounts(ctx context.Context) ([]AccountSummary, *http.Response, error) {
 	req, err := c.NewRequest("GET", "/api/v2/accounts", nil)
